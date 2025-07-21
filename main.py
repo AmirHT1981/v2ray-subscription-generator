@@ -2,7 +2,7 @@ import base64
 import subprocess
 
 NODES_FILE = "nodes.txt"
-OUTPUT_FILE = "subscription.txt"
+OUTPUT_FILE = "docs/subscription.txt"
 
 def check_node(node):
     try:
