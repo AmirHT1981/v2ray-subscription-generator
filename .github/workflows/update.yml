@@ -1,14 +1,15 @@
 name: Update Subscription
 
 on:
+  push:
+    branches:
+      - main
   schedule:
-    - cron: "0 0 * * *" # هر روز راس 00:00 UTC
-  workflow_dispatch:
+    - cron: '0 0 * * *'
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -27,8 +28,7 @@ jobs:
       - name: Commit and push changes
         run: |
           git config --global user.name "github-actions[bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add docs/subscription.txt
           git commit -m "Auto update subscription [skip ci]" || echo "No changes to commit"
-          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} HEAD:main
-
+          git push
