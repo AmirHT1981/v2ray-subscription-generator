@@ -20,7 +20,7 @@ def check_node(node):
         latency = time.time() - start
         s.close()
         return latency
-    except Exception as e:
+    except Exception:
         return None
 
 def main():
