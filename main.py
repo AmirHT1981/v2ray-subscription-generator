@@ -3,14 +3,13 @@ import requests
 import subprocess
 import concurrent.futures
 import re
+import json
 
-# خواندن URL منابع نود
 def load_sources(file='nodes_sources.txt'):
     with open(file, 'r') as f:
         urls = [line.strip() for line in f if line.strip()]
     return urls
 
-# گرفتن لیست نودها از یک URL (فقط vmess:// داخل متن)
 def fetch_nodes_from_url(url):
     try:
         resp = requests.get(url, timeout=10)
@@ -22,12 +21,10 @@ def fetch_nodes_from_url(url):
         print(f"Failed to fetch from {url}: {e}")
         return []
 
-# تابع برای ping ساده روی سرور (extract hostname از vmess json)
 def extract_address(node):
     try:
         b64 = node[8:]
         json_str = base64.b64decode(b64).decode()
-        import json
         j = json.loads(json_str)
         return j.get("add", None)
     except:
@@ -37,7 +34,6 @@ def ping_host(host):
     if not host:
         return 9999
     try:
-        # اجرا کردن دستور ping (یک بار با timeout 1 ثانیه)
         result = subprocess.run(['ping', '-c', '1', '-W', '1', host], capture_output=True)
         output = result.stdout.decode()
         match = re.search(r'time=(\d+\.?\d*) ms', output)
@@ -45,7 +41,7 @@ def ping_host(host):
             return float(match.group(1))
         else:
             return 9999
-    except Exception as e:
+    except Exception:
         return 9999
 
 def check_node_latency(node):
@@ -65,26 +61,22 @@ def main():
     
     print(f"Total nodes fetched: {len(all_nodes)}")
     
-    # پینگ گرفتن موازی برای سرعت
     with concurrent.futures.ThreadPoolExecutor(max_workers=20) as executor:
         results = list(executor.map(check_node_latency, all_nodes))
     
-    # مرتب سازی بر اساس latency
     results = sorted(results, key=lambda x: x[1])
     
-    # انتخاب بهترین 10 نود
     best_nodes = [node for node, latency in results[:10]]
     print("Best 10 nodes:")
     for n, l in results[:10]:
         print(f"Latency: {l} ms, Node: {n[:50]}...")
     
-    # ساختن فایل subscription (Base64 تمام نودها با \n)
-    subscription_content = '\n'.join(best_nodes).encode()
-    subscription_b64 = base64.b64encode(subscription_content).decode()
+    # ⚠️ توجه: اینجا بدون Base64 کل!
+    subscription_content = '\n'.join(best_nodes)
     
-    # ذخیره در docs/subscription.txt
     with open('docs/subscription.txt', 'w') as f:
-        f.write(subscription_b64)
+        f.write(subscription_content)
+    
     print("Subscription updated in docs/subscription.txt")
 
 if __name__ == "__main__":
