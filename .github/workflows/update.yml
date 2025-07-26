@@ -34,8 +34,10 @@ jobs:
 
           git add docs/subscription.txt
 
-          git diff --cached --quiet && echo "No changes to commit" || (
+          # Pull latest before commit
+          git pull --rebase --autostash origin main
+
+          git diff --cached --quiet && echo "✅ No changes to commit" || (
             git commit -m "Auto update subscription [skip ci]"
-            git pull --rebase origin main
             git push origin main
           )
