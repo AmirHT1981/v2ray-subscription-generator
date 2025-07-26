@@ -5,7 +5,7 @@ on:
     branches:
       - main
   schedule:
-    - cron: '0 0 * * *'
+    - cron: '0 0 * * *'  # هر روز ساعت ۰۰:۰۰ UTC
   workflow_dispatch:
 
 jobs:
@@ -21,23 +21,24 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: Install requirements
+      - name: Install dependencies
         run: pip install requests
 
       - name: Run main.py
         run: python main.py
 
-      - name: Commit and push if changes
+      - name: Commit and push changes if any
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
 
           git add docs/subscription.txt
 
-          # Pull latest before commit
+          # قبل از commit حتما pull --rebase کن تا تداخل نگیره
           git pull --rebase --autostash origin main
 
-          git diff --cached --quiet && echo "✅ No changes to commit" || (
+          # اگر چیزی تغییر نکرد، commit نمی‌کنه
+          git diff --cached --quiet && echo "No changes to commit" || (
             git commit -m "Auto update subscription [skip ci]"
             git push origin main
           )
