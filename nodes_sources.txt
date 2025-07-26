@@ -1,7 +1,6 @@
-https://raw.githubusercontent.com/freefq/free/master/v2
-https://www.v2rayssr.com/category/free-vmess/
-https://www.v2rayssr.com/
-https://freev2ray.net/
-https://www.v2rayssr.com/free-vmess
-https://v2rayssr.com/category/free-vmess/
-https://raw.githubusercontent.com/freefq/free/master/v2
+https://raw.githubusercontent.com/ermaozi/get_subscribe/main/subscribe/v2ray.txt
+https://raw.githubusercontent.com/learnhard-cn/free_proxy_ss/main/v2ray
+https://raw.githubusercontent.com/Pawdroid/Free-servers/main/sub
+https://raw.githubusercontent.com/mahdibland/V2RayAggregator/master/sub/sub_merge.txt
+https://raw.githubusercontent.com/AzadNetCH/Clash/main/V2Ray.txt
+
